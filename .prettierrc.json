@@ -1,0 +1,19 @@
+{
+  "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-packagejson"],
+  "semi": true,
+  "tabWidth": 2,
+  "printWidth": 100,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "jsxSingleQuote": true,
+  "singleAttributePerLine": true,
+  "bracketSameLine": false,
+  "importOrder": [
+    "^react$",
+    "^react-toastify",
+    "<THIRD_PARTY_MODULES>",
+    "^~/themes",
+    "^~/",
+    "^[./]"
+  ]
+}
