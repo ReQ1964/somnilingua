@@ -9,7 +9,9 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "generate": "node tools/download-file.cjs http://localhost:8080/v3/api-docs.yaml src/api/openapi.yaml && openapi-generator-cli generate",
+    "generate:frozen-definitions": "openapi-generator-cli generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -41,6 +43,7 @@
     "@radix-ui/react-toggle-group": "^1.1.10",
     "@radix-ui/react-tooltip": "^1.2.7",
     "@tanstack/react-query": "^5.83.0",
+    "axios": "^1.15.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -67,6 +70,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
+    "@openapitools/openapi-generator-cli": "^2.31.1",
     "@tailwindcss/typography": "^0.5.16",
     "@testing-library/jest-dom": "^6.6.0",
     "@testing-library/react": "^16.0.0",

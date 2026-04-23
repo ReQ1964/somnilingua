@@ -24,3 +24,13 @@ dist-ssr
 *.sw?
 .env
 target
+
+frontend/src/api/*.ts
+frontend/src/api/models
+frontend/src/api/docs/
+frontend/src/api/.openapi-generator/
+frontend/src/api/.gitignore
+frontend/src/api/.npmignore
+frontend/src/api/.openapi-generator-ignore
+frontend/src/api/*.sh
+frontend/!src/api/openapi.yaml
