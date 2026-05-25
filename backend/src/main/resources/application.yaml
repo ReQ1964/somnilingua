@@ -18,7 +18,7 @@ spring:
     generate-ddl: false
 
   flyway:
-    enabled: true
+    enabled: false
     locations: classpath:db/migration
     create-schemas: true
     schemas: somnilingua
