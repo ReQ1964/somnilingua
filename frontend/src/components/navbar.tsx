@@ -1,10 +1,11 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "@/router";
+import { useLocation } from "react-router-dom";
 import { Bug, Languages, Moon, Settings as SettingsIcon, Sun, Sparkles, Menu, LayoutDashboard, History as HistoryIcon, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/lib/theme";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import BugReportDialog from "./BugReportDialog";
+import BugReportDialog from "./bug-report-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
