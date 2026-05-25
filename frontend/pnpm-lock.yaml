@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@generouted/react-router':
+        specifier: 1.19.11
+        version: 1.19.11(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(vite@5.4.21(@types/node@22.19.17))
       '@hookform/resolvers':
         specifier: ^3.10.0
         version: 3.10.0(react-hook-form@7.73.1(react@18.3.1))
@@ -446,6 +449,13 @@ packages:
 
   '@floating-ui/utils@0.2.11':
     resolution: {integrity: sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==}
+
+  '@generouted/react-router@1.19.11':
+    resolution: {integrity: sha512-jmF+iOj7e6ttxVROa30jotgUCZJEvLBMHcmICS1Yoe6aB4xA97B5o5aKJJ6APhqWVAVa1z8UU3BXjEfFuaJiUw==}
+    peerDependencies:
+      react: '>=18'
+      react-router-dom: '>=6'
+      vite: '>=4'
 
   '@hookform/resolvers@3.10.0':
     resolution: {integrity: sha512-79Dv+3mDF7i+2ajj7SkypSKHhl1cbln1OGavqrsF7p6mbUv11xpqpacPsGDCTRvCSjEEIez2ef1NveSVL3b0Ag==}
@@ -2283,6 +2293,11 @@ packages:
   function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
 
+  generouted@1.20.2:
+    resolution: {integrity: sha512-Sx+aEC5o0MZIOs0FiqFJDAOQ1ZeWedrJ8SVr/sEK5quzI4kLRTZBHZAR+ivIb1Dw/lV5LrLWUBRsgeaR1UJ6qg==}
+    peerDependencies:
+      vite: '>=5'
+
   get-caller-file@2.0.5:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
     engines: {node: 6.* || 8.* || >= 10.*}
@@ -3551,6 +3566,14 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
 
   '@floating-ui/utils@0.2.11': {}
+
+  '@generouted/react-router@1.19.11(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(vite@5.4.21(@types/node@22.19.17))':
+    dependencies:
+      fast-glob: 3.3.3
+      generouted: 1.20.2(vite@5.4.21(@types/node@22.19.17))
+      react: 18.3.1
+      react-router-dom: 6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      vite: 5.4.21(@types/node@22.19.17)
 
   '@hookform/resolvers@3.10.0(react-hook-form@7.73.1(react@18.3.1))':
     dependencies:
@@ -5409,6 +5432,10 @@ snapshots:
     optional: true
 
   function-bind@1.1.2: {}
+
+  generouted@1.20.2(vite@5.4.21(@types/node@22.19.17)):
+    dependencies:
+      vite: 5.4.21(@types/node@22.19.17)
 
   get-caller-file@2.0.5: {}
 

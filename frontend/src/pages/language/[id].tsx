@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "@/router";
 import { useLanguages, useActivities, totalHours, calcStreak, todayKey, minutesOnDate, ActivityType, Activity } from "@/lib/store";
 import { LEVELS, levelFromHours, progressToNext } from "@/lib/cefr";
 import { Button } from "@/components/ui/button";
@@ -7,8 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { useTranslation } from "react-i18next";
 import { useState, useMemo } from "react";
-import AddActivityDialog from "@/components/AddActivityDialog";
-import StreakCalendar from "@/components/StreakCalendar";
+import AddActivityDialog from "@/components/add-activity-dialog";
+import StreakCalendar from "@/components/streak-calendar";
 import { ArrowLeft, Plus, Flame, Clock, Target, Trash2, Pencil, MoreVertical, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
 import {
@@ -32,7 +32,7 @@ const TYPE_COLORS: Record<ActivityType, string> = {
 };
 
 export default function LanguageDetail() {
-  const { id } = useParams();
+  const { id } = useParams("/language/:id");
   const nav = useNavigate();
   const { t } = useTranslation();
   const { languages, remove: removeLang } = useLanguages();

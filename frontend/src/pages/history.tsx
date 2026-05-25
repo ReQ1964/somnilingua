@@ -8,7 +8,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
-import AddActivityDialog from '@/components/AddActivityDialog';
+import AddActivityDialog from '@/components/add-activity-dialog';
 
 const TYPE_COLORS: Record<ActivityType, string> = {
   watching: 'hsl(182 56% 42%)',

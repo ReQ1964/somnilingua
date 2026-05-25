@@ -1,10 +1,10 @@
 import { useLanguages, useActivities, calcStreak } from "@/lib/store";
-import LanguageCard from "@/components/LanguageCard";
-import LanguageCardSkeleton from "@/components/LanguageCardSkeleton";
+import LanguageCard from "@/components/language-card";
+import LanguageCardSkeleton from "@/components/language-card-skeleton";
 import { Button } from "@/components/ui/button";
 import { Plus, Sparkles } from "lucide-react";
 import { useState } from "react";
-import AddLanguageDialog from "@/components/AddLanguageDialog";
+import AddLanguageDialog from "@/components/add-language-dialog";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 

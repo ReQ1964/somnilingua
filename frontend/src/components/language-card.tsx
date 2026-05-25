@@ -3,7 +3,7 @@ import { progressToNext } from "@/lib/cefr";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link } from "@/router";
 import { motion } from "framer-motion";
 import { Flame } from "lucide-react";
 
@@ -30,7 +30,7 @@ export default function LanguageCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06, duration: 0.4 }}
     >
-      <Link to={`/language/${language.id}`}>
+      <Link to="/language/:id" params={{ id: language.id }}>
         <Card className="group relative overflow-hidden p-6 hover:shadow-elegant transition-all duration-300 hover:-translate-y-1 cursor-pointer border-border/60">
           <div className="absolute inset-0 bg-gradient-hero opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="relative">
