@@ -7,29 +7,8 @@ spring:
     password: ${POSTGRES_PASSWORD:secret}
     driver-class-name: org.postgresql.Driver
 
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        default_schema: somnilingua
-    show-sql: false
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    generate-ddl: false
-
-  flyway:
-    enabled: false
-    locations: classpath:db/migration
-    create-schemas: true
-    schemas: somnilingua
-    default-schema: somnilingua
-    baseline-on-migrate: true
-    baseline-version: 0
-    validate-on-migrate: true
-    table: flyway_schema_history
-
 server:
-  port: ${PORT:8080}
+  port: ${PORT:8082}
 logging:
   level:
     org.flywaydb: DEBUG

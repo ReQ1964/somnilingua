@@ -20,8 +20,8 @@
   <description>Somnilingua Backend</description>
 
   <properties>
-    <java.version>21</java.version>
-    <lombok.version>1.18.36</lombok.version>
+    <java.version>25</java.version>
+    <lombok.version>1.18.42</lombok.version>
     <testcontainers.version>1.20.0</testcontainers.version>
   </properties>
 
