@@ -23,6 +23,10 @@ public class FlywayConfig {
         .schemas("somnilingua")
         .defaultSchema("somnilingua")
         .locations("classpath:db/migration")
+        .baselineOnMigrate(true)
+        .baselineVersion("0")
+        .validateOnMigrate(true)
+        .table("flyway_schema_history")
         .load();
 
     flyway.migrate();
