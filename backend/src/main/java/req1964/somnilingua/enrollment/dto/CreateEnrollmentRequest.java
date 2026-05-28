@@ -1,0 +1,15 @@
+package req1964.somnilingua.enrollment.dto;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.Value;
+
+@Value
+public class CreateEnrollmentRequest {
+
+  @NotNull
+  Long languageId;
+  @NotNull
+  Integer starterMinutes;
+  @NotNull
+  Integer dailyGoalMinutes;
+}

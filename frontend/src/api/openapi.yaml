@@ -5,5 +5,46 @@ info:
 servers:
 - url: http://localhost:8080
   description: Generated server url
-paths: {}
-components: {}
+tags:
+- name: Language
+  description: Api to manage languages
+paths:
+  /api/language:
+    get:
+      tags:
+      - Language
+      summary: List of all languages
+      description: It returns a list of all the available languages
+      operationId: getLanguages
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LanguageResponse"
+components:
+  schemas:
+    LanguageResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Internal id
+          example: 1
+        name:
+          type: string
+          description: Display name
+          example: Spanish
+        code:
+          type: string
+          description: Language code
+          example: es
+          maxLength: 10
+      required:
+      - code
+      - id
+      - name
