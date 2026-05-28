@@ -30,7 +30,6 @@ public class EnrollmentController {
   public ResponseEntity<Void> createEnrollment(@Valid @RequestBody CreateEnrollmentRequest request) {
     enrollmentService.enroll(request);
 
-
     return ResponseEntity
         .status(HttpStatus.NO_CONTENT)
         .build();

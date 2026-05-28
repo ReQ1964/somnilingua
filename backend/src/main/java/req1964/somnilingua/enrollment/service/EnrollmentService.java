@@ -9,6 +9,7 @@ import req1964.somnilingua.enrollment.dto.CreateEnrollmentRequest;
 import req1964.somnilingua.enrollment.repository.EnrollmentRepository;
 import req1964.somnilingua.language.domain.Language;
 import req1964.somnilingua.language.repository.LanguageRepository;
+import req1964.somnilingua.shared.exception.ConflictException;
 import req1964.somnilingua.shared.exception.ResourceNotFoundException;
 import req1964.somnilingua.user.domain.User;
 import req1964.somnilingua.user.repository.UserRepository;
@@ -28,6 +29,8 @@ public class EnrollmentService {
 
     Language language = languageRepository.findById(request.getLanguageId()).orElseThrow(() -> new ResourceNotFoundException("Language not found", request.getLanguageId()));
 
+    assertNotAlreadyEnrolled(user, language);
+
     UserLanguage userLanguage = new UserLanguage();
     userLanguage.setLanguage(language);
     userLanguage.setUser(user);
@@ -37,5 +40,11 @@ public class EnrollmentService {
 
     enrollmentRepository.save(userLanguage);
     activityRepository.save(activity);
+  }
+
+  private void assertNotAlreadyEnrolled(User user, Language language) {
+    if (enrollmentRepository.existsByUserAndLanguage(user, language)) {
+      throw new ConflictException("User already enrolled in this language");
+    }
   }
 }
