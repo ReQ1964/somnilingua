@@ -6,27 +6,43 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
-import java.time.Instant;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-  @ExceptionHandler(BaseException.class)
-  public ResponseEntity<?> handleBaseException(BaseException ex) {
+  @ExceptionHandler(RuntimeException.class)
+  public ResponseEntity<ApiError> handleRuntimeException(RuntimeException e) {
 
-    Map<String, Object> body = new HashMap<>();
-    body.put("error", ex.getMessage());
-    body.put("timestamp", Instant.now());
+    ApiError error = ApiError.builder()
+        .message(e.getMessage())
+        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+        .timestamp(Instant.now())
+        .build();
+    
+    return ResponseEntity
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(error);
+  }
+
+  @ExceptionHandler(BaseException.class)
+  public ResponseEntity<ApiError> handleBaseException(BaseException ex) {
+
+    ApiError error = ApiError.builder()
+        .message(ex.getMessage())
+        .status(ex.getStatus().value())
+        .timestamp(Instant.now())
+        .build();
 
     return ResponseEntity
         .status(ex.getStatus())
-        .body(body);
+        .body(error);
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
+  public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException ex) {
 
     Map<String, String> errors = new HashMap<>();
 
@@ -35,8 +51,15 @@ public class GlobalExceptionHandler {
             errors.put(error.getField(), error.getDefaultMessage())
         );
 
+    ApiError apiError = ApiError.builder()
+        .message("Validation failed")
+        .status(HttpStatus.BAD_REQUEST.value())
+        .timestamp(Instant.now())
+        .fieldErrors(errors)
+        .build();
+
     return ResponseEntity
         .status(HttpStatus.BAD_REQUEST)
-        .body(errors);
+        .body(apiError);
   }
 }
