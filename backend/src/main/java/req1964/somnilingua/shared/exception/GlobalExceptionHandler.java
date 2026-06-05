@@ -1,5 +1,6 @@
 package req1964.somnilingua.shared.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,16 +15,30 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(RuntimeException.class)
-  public ResponseEntity<ApiError> handleRuntimeException(RuntimeException e) {
+  public ResponseEntity<ApiError> handleRuntimeException() {
 
     ApiError error = ApiError.builder()
-        .message(e.getMessage())
+        .message("Internal server error")
         .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
         .timestamp(Instant.now())
         .build();
-    
+
     return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(error);
+  }
+
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity<ApiError> handleDataIntegrityViolationException() {
+
+    ApiError error = ApiError.builder()
+        .message("Database constraint violation")
+        .status(HttpStatus.CONFLICT.value())
+        .timestamp(Instant.now())
+        .build();
+
+    return ResponseEntity
+        .status(HttpStatus.CONFLICT)
         .body(error);
   }
 

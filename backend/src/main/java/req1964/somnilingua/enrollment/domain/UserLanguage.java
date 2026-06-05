@@ -34,5 +34,5 @@ public class UserLanguage {
   private Language language;
 
   @OneToMany(mappedBy = "userLanguage", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Activity> activity;
+  private List<Activity> activities;
 }
