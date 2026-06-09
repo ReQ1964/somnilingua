@@ -1,12 +1,12 @@
-import { useLanguages, useActivities, calcStreak } from "@/lib/store";
-import LanguageCard from "@/components/language-card";
-import LanguageCardSkeleton from "@/components/language-card-skeleton";
-import { Button } from "@/components/ui/button";
-import { Plus, Sparkles } from "lucide-react";
-import { useState } from "react";
-import AddLanguageDialog from "@/components/add-language-dialog";
-import { useTranslation } from "react-i18next";
-import { motion } from "framer-motion";
+import { useLanguages, useActivities, calcStreak } from '@/lib/store';
+import LanguageCard from '@/components/language-card';
+import LanguageCardSkeleton from '@/components/language-card-skeleton';
+import { Button } from '@/components/ui/button';
+import { Plus, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import AddLanguageDialog from '@/components/add-language-dialog/add-language-dialog.tsx';
+import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 
 const Index = () => {
   const { t } = useTranslation();
@@ -23,14 +23,14 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-3xl md:text-4xl font-bold tracking-tight"
           >
-            {t("dashboard.title")}
+            {t('dashboard.title')}
           </motion.h1>
-          <p className="text-muted-foreground mt-1">{t("app.tagline")}</p>
+          <p className="text-muted-foreground mt-1">{t('app.tagline')}</p>
         </div>
         {languages.length > 0 && (
           <Button onClick={() => setOpen(true)} className="bg-gradient-primary shadow-soft">
             <Plus className="h-4 w-4 mr-2" />
-            {t("dashboard.addLanguage")}
+            {t('dashboard.addLanguage')}
           </Button>
         )}
       </div>
@@ -47,14 +47,15 @@ const Index = () => {
           animate={{ opacity: 1, scale: 1 }}
           className="rounded-3xl bg-gradient-hero border border-border/60 p-12 text-center"
         >
-          <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-glow mb-4">
+          <div
+            className="mx-auto w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-glow mb-4">
             <Sparkles className="h-8 w-8 text-primary-foreground" />
           </div>
-          <h2 className="text-xl font-semibold mb-2">{t("dashboard.empty")}</h2>
-          <p className="text-muted-foreground mb-6 max-w-md mx-auto">{t("dashboard.emptyDesc")}</p>
+          <h2 className="text-xl font-semibold mb-2">{t('dashboard.empty')}</h2>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">{t('dashboard.emptyDesc')}</p>
           <Button size="lg" onClick={() => setOpen(true)} className="bg-gradient-primary shadow-elegant">
             <Plus className="h-5 w-5 mr-2" />
-            {t("dashboard.addFirst")}
+            {t('dashboard.addFirst')}
           </Button>
         </motion.div>
       ) : (

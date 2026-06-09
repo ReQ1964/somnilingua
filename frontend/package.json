@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "generate": "node tools/download-file.cjs http://localhost:8080/v3/api-docs.yaml src/api/openapi.yaml && openapi-generator-cli generate",
+    "generate": "node tools/download-file.cjs http://localhost:8082/v3/api-docs.yaml src/api/openapi.yaml && openapi-generator-cli generate",
     "generate:frozen-definitions": "openapi-generator-cli generate"
   },
   "dependencies": {
