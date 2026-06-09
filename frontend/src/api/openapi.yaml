@@ -3,13 +3,33 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-- url: http://localhost:8080
+- url: http://localhost:8082
   description: Generated server url
 tags:
 - name: Language
   description: Api to manage languages
 paths:
-  /api/language:
+  /api/enrollments:
+    post:
+      tags:
+      - enrollment-controller
+      summary: Enroll user into a language
+      description: Creates a UserLanguage record linking a user and a language.
+      operationId: createEnrollment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEnrollmentRequest"
+        required: true
+      responses:
+        "204":
+          description: Enrollment created successfully
+        "404":
+          description: User or Language not found
+        "409":
+          description: User already enrolled in language
+  /api/languages:
     get:
       tags:
       - Language
@@ -25,8 +45,40 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/LanguageResponse"
+  /api/cefrs:
+    get:
+      tags:
+      - cefr-controller
+      operationId: getAllCefrs
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CefrResponse"
 components:
   schemas:
+    CreateEnrollmentRequest:
+      type: object
+      properties:
+        languageId:
+          type: integer
+          format: int64
+        starterMinutes:
+          type: integer
+          format: int32
+          minimum: 1
+        dailyGoalMinutes:
+          type: integer
+          format: int32
+          minimum: 1
+      required:
+      - dailyGoalMinutes
+      - languageId
+      - starterMinutes
     LanguageResponse:
       type: object
       properties:
@@ -48,3 +100,25 @@ components:
       - code
       - id
       - name
+    CefrResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        level:
+          type: string
+        minutes:
+          type: integer
+          format: int32
+        hours:
+          type: integer
+          format: int32
+        words:
+          type: integer
+          format: int32
+        descriptionKey:
+          type: string
+        order:
+          type: integer
+          format: int32

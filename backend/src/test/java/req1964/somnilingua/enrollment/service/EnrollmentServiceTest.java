@@ -127,4 +127,30 @@ class EnrollmentServiceTest {
 
   }
 
+  @Test
+  void shouldNotGenerateStarterActivityIfMinutes0() {
+    // given
+    User user = new User();
+    Language language = new Language();
+
+    when(userRepository.findById(1L))
+        .thenReturn(Optional.of(user));
+
+    when(languageRepository.findById(10L))
+        .thenReturn(Optional.of(language));
+
+    when(enrollmentRepository.existsByUserAndLanguage(user, language))
+        .thenReturn(false);
+
+    CreateEnrollmentRequest request = new CreateEnrollmentRequest(10L, 0, 10);
+    // when
+    enrollmentService.enroll(request);
+    // then
+    verify(enrollmentRepository).existsByUserAndLanguage(user, language);
+    verify(enrollmentRepository).save(argThat(userLanguage ->
+        userLanguage.getActivities() == null
+    ));
+
+  }
+
 }

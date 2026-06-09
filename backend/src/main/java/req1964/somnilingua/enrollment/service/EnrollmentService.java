@@ -38,8 +38,10 @@ public class EnrollmentService {
     userLanguage.setUser(user);
     userLanguage.setDailyGoalMinutes(request.getDailyGoalMinutes());
 
-    Activity activity = Activity.createStarterActivity(userLanguage, request.getStarterMinutes());
-    userLanguage.setActivities(List.of(activity));
+    if (request.getStarterMinutes() > 0) {
+      Activity activity = Activity.createStarterActivity(userLanguage, request.getStarterMinutes());
+      userLanguage.setActivities(List.of(activity));
+    }
 
     enrollmentRepository.save(userLanguage);
   }
