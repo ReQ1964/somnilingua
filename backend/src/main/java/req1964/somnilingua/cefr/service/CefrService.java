@@ -7,7 +7,6 @@ import req1964.somnilingua.cefr.dto.CefrResponse;
 import req1964.somnilingua.cefr.mapper.CefrMapper;
 import req1964.somnilingua.cefr.repository.CefrRepository;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Transactional
@@ -17,9 +16,8 @@ public class CefrService {
   private final CefrRepository cefrRepository;
 
   public List<CefrResponse> getAllCefrs() {
-    return cefrRepository.findAll().stream()
+    return cefrRepository.findAllByOrderBySortOrderAsc().stream()
         .map(CefrMapper::toResponse)
-        .sorted(Comparator.comparingInt(CefrResponse::getOrder))
         .toList();
   }
 
