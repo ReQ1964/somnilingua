@@ -10,13 +10,13 @@ public class CefrResponse {
 
   String level;
 
-  Integer minutes;
+  int minutes;
 
-  Integer hours;
+  int hours;
 
-  Integer words;
+  int words;
 
   String descriptionKey;
 
-  Integer order;
+  int order;
 }
