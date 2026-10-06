@@ -1,9 +1,14 @@
 package req1964.somnilingua.activity.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import req1964.somnilingua.activity.dto.ActivityType;
 import req1964.somnilingua.enrollment.domain.UserLanguage;
+
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -23,7 +28,14 @@ public class Activity {
   @Enumerated(EnumType.STRING)
   private ActivityType type;
   private int minutes;
+
   private String notes;
+
+  @Column(name = "created_at")
+  private Instant createdAt;
+
+  @Column(name = "modified_at")
+  private Instant modifiedAt;
 
   public static Activity createStarterActivity(UserLanguage userLanguage, int minutes) {
     Activity activity = new Activity();
