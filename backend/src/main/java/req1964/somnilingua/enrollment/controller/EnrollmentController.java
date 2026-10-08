@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import req1964.somnilingua.enrollment.dto.CreateEnrollmentRequest;
-import req1964.somnilingua.enrollment.dto.UserLanguageResponse;
+import req1964.somnilingua.enrollment.dto.LanguageEnrollmentResponse;
 import req1964.somnilingua.enrollment.service.EnrollmentService;
 import req1964.somnilingua.shared.dto.PageResponse;
 
@@ -21,7 +21,7 @@ public class EnrollmentController {
 
   @Operation(
       summary = "Enroll user into a language",
-      description = "Creates a UserLanguage record linking a user and a language."
+      description = "Creates a LanguageEnrollment record linking a user and a language."
   )
   @ApiResponse(responseCode = "204", description = "Enrollment created successfully")
   @ApiResponse(responseCode = "404", description = "User or Language not found")
@@ -40,7 +40,7 @@ public class EnrollmentController {
       description = "Returns a paginated and filtered list of languages for a user."
   )
   @GetMapping()
-  public PageResponse<UserLanguageResponse> getPaginatedUserLanguages(Pageable pageable) {
-    return enrollmentService.getPaginatedUserLanguages(pageable);
+  public PageResponse<LanguageEnrollmentResponse> getPaginatedLanguageEnrollments(Pageable pageable) {
+    return enrollmentService.getPaginatedLanguageEnrollments(pageable);
   }
 }

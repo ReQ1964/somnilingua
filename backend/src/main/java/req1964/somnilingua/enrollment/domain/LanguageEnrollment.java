@@ -11,12 +11,13 @@ import req1964.somnilingua.user.domain.User;
 
 import java.util.List;
 
-@Entity(name = "user_language")
+@Entity
+@Table(name = "language_enrollment")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserLanguage {
+public class LanguageEnrollment {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +34,6 @@ public class UserLanguage {
   @JoinColumn(name = "fk_language_id", nullable = false)
   private Language language;
 
-  @OneToMany(mappedBy = "userLanguage", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "languageEnrollment", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Activity> activities;
 }

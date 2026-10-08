@@ -6,11 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import req1964.somnilingua.activity.domain.Activity;
-import req1964.somnilingua.enrollment.domain.UserLanguage;
-import req1964.somnilingua.enrollment.dto.ActivityStats;
+import req1964.somnilingua.enrollment.domain.LanguageEnrollment;
+import req1964.somnilingua.enrollment.dto.LanguageEnrollmentActivityStats;
+import req1964.somnilingua.enrollment.dto.ActivityStatsResponse;
 import req1964.somnilingua.enrollment.dto.CreateEnrollmentRequest;
-import req1964.somnilingua.enrollment.dto.UserLanguageResponse;
-import req1964.somnilingua.enrollment.mapper.UserLanguageMapper;
+import req1964.somnilingua.enrollment.dto.LanguageEnrollmentResponse;
+import req1964.somnilingua.enrollment.mapper.ActivityStatsMapper;
+import req1964.somnilingua.enrollment.mapper.LanguageEnrollmentMapper;
 import req1964.somnilingua.enrollment.repository.EnrollmentRepository;
 import req1964.somnilingua.language.domain.Language;
 import req1964.somnilingua.language.repository.LanguageRepository;
@@ -21,6 +23,8 @@ import req1964.somnilingua.user.domain.User;
 import req1964.somnilingua.user.repository.UserRepository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -39,23 +43,36 @@ public class EnrollmentService {
 
     assertNotAlreadyEnrolled(user, language);
 
-    UserLanguage userLanguage = new UserLanguage();
-    userLanguage.setLanguage(language);
-    userLanguage.setUser(user);
-    userLanguage.setDailyGoalMinutes(request.getDailyGoalMinutes());
+    LanguageEnrollment languageEnrollment = new LanguageEnrollment();
+    languageEnrollment.setLanguage(language);
+    languageEnrollment.setUser(user);
+    languageEnrollment.setDailyGoalMinutes(request.getDailyGoalMinutes());
 
     if (request.getStarterMinutes() > 0) {
-      Activity activity = Activity.createStarterActivity(userLanguage, request.getStarterMinutes());
-      userLanguage.setActivities(List.of(activity));
+      Activity activity = Activity.createStarterActivity(languageEnrollment, request.getStarterMinutes());
+      languageEnrollment.setActivities(List.of(activity));
     }
 
-    enrollmentRepository.save(userLanguage);
+    enrollmentRepository.save(languageEnrollment);
   }
 
-  public PageResponse<UserLanguageResponse> getPaginatedUserLanguages(Pageable pageable) {
+  public PageResponse<LanguageEnrollmentResponse> getPaginatedLanguageEnrollments(Pageable pageable) {
     User user = userRepository.findById(DEV_USER_ID).orElseThrow(() -> new ResourceNotFoundException("User", DEV_USER_ID));
-    ActivityStats activityStats = enrollmentRepository.getActivityStatsByUserLanguage(user); // todo to do poprawy
-    return PageResponse.of(enrollmentRepository.findAll(pageable).map(userLanguage -> UserLanguageMapper.toResponse(userLanguage, activityStats)));
+    Page<LanguageEnrollment> languageEnrollments = enrollmentRepository.findAllByUser(user, pageable);
+    List<Long> ids = languageEnrollments.stream().map(LanguageEnrollment::getId).toList();
+
+
+    List<LanguageEnrollmentActivityStats> stats = ids.isEmpty() ? List.of() : enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(ids);
+
+    Map<Long, ActivityStatsResponse> statsByLanguageEnrollmentId = stats.stream().collect(Collectors.toMap(LanguageEnrollmentActivityStats::languageEnrollmentId, ActivityStatsMapper::toResponse));
+
+
+    return PageResponse.of(languageEnrollments
+        .map(languageEnrollment -> {
+          ActivityStatsResponse activityStats = statsByLanguageEnrollmentId.getOrDefault(languageEnrollment.getId(), new ActivityStatsResponse(0, 0));
+
+          return LanguageEnrollmentMapper.toResponse(languageEnrollment, activityStats);
+        }));
   }
 
   private void assertNotAlreadyEnrolled(User user, Language language) {

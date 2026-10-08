@@ -120,9 +120,9 @@ class EnrollmentServiceTest {
     enrollmentService.enroll(request);
     // then
     verify(enrollmentRepository).existsByUserAndLanguage(user, language);
-    verify(enrollmentRepository).save(argThat(userLanguage ->
-        userLanguage.getActivities() != null &&
-            userLanguage.getActivities().size() == 1
+    verify(enrollmentRepository).save(argThat(languageEnrollment ->
+        languageEnrollment.getActivities() != null &&
+            languageEnrollment.getActivities().size() == 1
     ));
 
   }
@@ -147,8 +147,8 @@ class EnrollmentServiceTest {
     enrollmentService.enroll(request);
     // then
     verify(enrollmentRepository).existsByUserAndLanguage(user, language);
-    verify(enrollmentRepository).save(argThat(userLanguage ->
-        userLanguage.getActivities() == null
+    verify(enrollmentRepository).save(argThat(languageEnrollment ->
+        languageEnrollment.getActivities() == null
     ));
 
   }

@@ -14,7 +14,7 @@ paths:
       tags:
       - enrollment-controller
       summary: Enroll user into a language
-      description: Creates a UserLanguage record linking a user and a language.
+      description: Creates a LanguageEnrollment record linking a user and a language.
       operationId: createEnrollment
       requestBody:
         content:

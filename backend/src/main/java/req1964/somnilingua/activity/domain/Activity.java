@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import req1964.somnilingua.activity.dto.ActivityType;
-import req1964.somnilingua.enrollment.domain.UserLanguage;
+import req1964.somnilingua.enrollment.domain.LanguageEnrollment;
 
 import java.time.Instant;
 
@@ -22,8 +22,8 @@ public class Activity {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "fk_user_language_id", nullable = false)
-  private UserLanguage userLanguage;
+  @JoinColumn(name = "fk_language_enrollment_id", nullable = false)
+  private LanguageEnrollment languageEnrollment;
 
   @Enumerated(EnumType.STRING)
   private ActivityType type;
@@ -37,10 +37,10 @@ public class Activity {
   @Column(name = "modified_at")
   private Instant modifiedAt;
 
-  public static Activity createStarterActivity(UserLanguage userLanguage, int minutes) {
+  public static Activity createStarterActivity(LanguageEnrollment languageEnrollment, int minutes) {
     Activity activity = new Activity();
     activity.setType(ActivityType.OTHER);
-    activity.setUserLanguage(userLanguage);
+    activity.setLanguageEnrollment(languageEnrollment);
     activity.setMinutes(minutes);
     activity.setNotes("This is your chosen starter level. You can edit it anytime.");
     return activity;

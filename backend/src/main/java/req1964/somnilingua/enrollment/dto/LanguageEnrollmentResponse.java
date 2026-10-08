@@ -6,8 +6,9 @@ import req1964.somnilingua.language.dto.LanguageResponse;
 
 @Value
 @Builder
-public class UserLanguageResponse {
+public class LanguageEnrollmentResponse {
   Long id;
-  ActivityStats activityStats;
+  Integer dailyGoalMinutes;
+  ActivityStatsResponse activityStats;
   LanguageResponse language;
 }
