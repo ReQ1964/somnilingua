@@ -6,6 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import req1964.somnilingua.activity.domain.Activity;
+import req1964.somnilingua.cefr.domain.CefrLevel;
+import req1964.somnilingua.cefr.dto.CefrProgressResponse;
+import req1964.somnilingua.cefr.repository.CefrRepository;
+import req1964.somnilingua.cefr.service.CefrService;
 import req1964.somnilingua.enrollment.domain.LanguageEnrollment;
 import req1964.somnilingua.enrollment.dto.LanguageEnrollmentActivityStats;
 import req1964.somnilingua.enrollment.dto.ActivityStatsResponse;
@@ -30,16 +34,21 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class EnrollmentService {
+
   private final EnrollmentRepository enrollmentRepository;
   private final LanguageRepository languageRepository;
   private final UserRepository userRepository;
 
   private static final Long DEV_USER_ID = 1L;
+  private final CefrRepository cefrRepository;
+  private final CefrService cefrService;
 
   public void enroll(CreateEnrollmentRequest request) {
-    User user = userRepository.findById(DEV_USER_ID).orElseThrow(() -> new ResourceNotFoundException("User", DEV_USER_ID));
+    User user = userRepository.findById(DEV_USER_ID)
+        .orElseThrow(() -> new ResourceNotFoundException("User", DEV_USER_ID));
 
-    Language language = languageRepository.findById(request.getLanguageId()).orElseThrow(() -> new ResourceNotFoundException("Language", request.getLanguageId()));
+    Language language = languageRepository.findById(request.getLanguageId())
+        .orElseThrow(() -> new ResourceNotFoundException("Language", request.getLanguageId()));
 
     assertNotAlreadyEnrolled(user, language);
 
@@ -49,29 +58,40 @@ public class EnrollmentService {
     languageEnrollment.setDailyGoalMinutes(request.getDailyGoalMinutes());
 
     if (request.getStarterMinutes() > 0) {
-      Activity activity = Activity.createStarterActivity(languageEnrollment, request.getStarterMinutes());
+      Activity activity = Activity.createStarterActivity(languageEnrollment,
+          request.getStarterMinutes());
       languageEnrollment.setActivities(List.of(activity));
     }
 
     enrollmentRepository.save(languageEnrollment);
   }
 
-  public PageResponse<LanguageEnrollmentResponse> getPaginatedLanguageEnrollments(Pageable pageable) {
-    User user = userRepository.findById(DEV_USER_ID).orElseThrow(() -> new ResourceNotFoundException("User", DEV_USER_ID));
-    Page<LanguageEnrollment> languageEnrollments = enrollmentRepository.findAllByUser(user, pageable);
+  public PageResponse<LanguageEnrollmentResponse> getPaginatedLanguageEnrollments(
+      Pageable pageable) {
+    User user = userRepository.findById(DEV_USER_ID)
+        .orElseThrow(() -> new ResourceNotFoundException("User", DEV_USER_ID));
+    Page<LanguageEnrollment> languageEnrollments = enrollmentRepository.findAllByUser(user,
+        pageable);
     List<Long> ids = languageEnrollments.stream().map(LanguageEnrollment::getId).toList();
 
+    List<LanguageEnrollmentActivityStats> stats = ids.isEmpty() ? List.of()
+        : enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(ids);
 
-    List<LanguageEnrollmentActivityStats> stats = ids.isEmpty() ? List.of() : enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(ids);
+    Map<Long, ActivityStatsResponse> statsByLanguageEnrollmentId = stats.stream().collect(
+        Collectors.toMap(LanguageEnrollmentActivityStats::languageEnrollmentId,
+            ActivityStatsMapper::toResponse));
 
-    Map<Long, ActivityStatsResponse> statsByLanguageEnrollmentId = stats.stream().collect(Collectors.toMap(LanguageEnrollmentActivityStats::languageEnrollmentId, ActivityStatsMapper::toResponse));
-
+    List<CefrLevel> cefrLevels = cefrRepository.findAll();
 
     return PageResponse.of(languageEnrollments
         .map(languageEnrollment -> {
-          ActivityStatsResponse activityStats = statsByLanguageEnrollmentId.getOrDefault(languageEnrollment.getId(), new ActivityStatsResponse(0, 0));
+          ActivityStatsResponse activityStats = statsByLanguageEnrollmentId.getOrDefault(
+              languageEnrollment.getId(), new ActivityStatsResponse(0, 0));
+          CefrProgressResponse cefrCalculation = cefrService.calculateCefrLevel(
+              activityStats.totalMinutes(), cefrLevels);
 
-          return LanguageEnrollmentMapper.toResponse(languageEnrollment, activityStats);
+          return LanguageEnrollmentMapper.toResponse(languageEnrollment, activityStats,
+              cefrCalculation);
         }));
   }
 
