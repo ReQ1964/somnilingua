@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import req1964.somnilingua.activity.dto.ActivityType;
 import req1964.somnilingua.enrollment.domain.LanguageEnrollment;
 
@@ -32,11 +33,10 @@ public class Activity {
 
   private String notes;
 
-  @CreationTimestamp
-  @Column(name = "created_at", nullable = false, updatable = false)
+  @Column(name = "created_at", nullable = false, updatable = false, insertable = false)
   private Instant createdAt;
 
-  @Column(name = "modified_at")
+  @Column(name = "modified_at", updatable = false, insertable = false)
   private Instant modifiedAt;
 
   public static Activity createStarterActivity(LanguageEnrollment languageEnrollment, int minutes) {
