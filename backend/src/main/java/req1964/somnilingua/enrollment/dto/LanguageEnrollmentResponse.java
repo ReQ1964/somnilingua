@@ -10,7 +10,7 @@ import req1964.somnilingua.language.dto.LanguageResponse;
 public class LanguageEnrollmentResponse {
 
   Long id;
-  Integer dailyGoalMinutes;
+  int dailyGoalMinutes;
   ActivityStatsResponse activityStats;
   LanguageResponse language;
   CefrProgressResponse cefrProgress;

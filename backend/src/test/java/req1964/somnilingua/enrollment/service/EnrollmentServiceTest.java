@@ -221,7 +221,7 @@ class EnrollmentServiceTest {
         .currentLevel("A0")
         .nextLevel("A1")
         .minutesUntilNextLevel(2900L)
-        .progressPercent(3L)
+        .progressPercent(3)
         .build();
 
     Page<LanguageEnrollment> page = new PageImpl<>(List.of(enrollment), PAGEABLE, 1);
@@ -278,13 +278,13 @@ class EnrollmentServiceTest {
         .currentLevel("A0")
         .nextLevel("A1")
         .minutesUntilNextLevel(2900L)
-        .progressPercent(3L)
+        .progressPercent(3)
         .build();
     CefrProgressResponse progress2 = CefrProgressResponse.builder()
         .currentLevel("A1")
         .nextLevel("A2")
         .minutesUntilNextLevel(4000L)
-        .progressPercent(50L)
+        .progressPercent(50)
         .build();
 
     Page<LanguageEnrollment> page = new PageImpl<>(List.of(enrollment, enrollment2), PAGEABLE, 1);
@@ -311,7 +311,7 @@ class EnrollmentServiceTest {
     assertThat(result).isNotNull();
     assertThat(result.getData()).hasSize(2);
     LanguageEnrollmentResponse response = result.getData().getFirst();
-    assertThat(response.getDailyGoalMinutes()).isEqualTo(10L);
+    assertThat(response.getDailyGoalMinutes()).isEqualTo(10);
     assertThat(response.getId()).isEqualTo(ENROLLMENT_ID);
     assertThat(response.getLanguage().getCode()).isEqualTo("en");
     assertThat(response.getActivityStats().totalMinutes()).isEqualTo(100L);
@@ -321,7 +321,7 @@ class EnrollmentServiceTest {
     assertThat(response.getCefrProgress().getProgressPercent()).isEqualTo(3L);
 
     LanguageEnrollmentResponse response2 = result.getData().get(1);
-    assertThat(response2.getDailyGoalMinutes()).isEqualTo(10L);
+    assertThat(response2.getDailyGoalMinutes()).isEqualTo(10);
     assertThat(response2.getId()).isEqualTo(2L);
     assertThat(response2.getLanguage().getCode()).isEqualTo("en");
     assertThat(response2.getActivityStats().totalMinutes()).isEqualTo(500L);
@@ -406,7 +406,7 @@ class EnrollmentServiceTest {
         .currentLevel("A0")
         .nextLevel("A1")
         .minutesUntilNextLevel(2900L)
-        .progressPercent(0L)
+        .progressPercent(0)
         .build();
 
     when(userRepository.findById(USER_ID))

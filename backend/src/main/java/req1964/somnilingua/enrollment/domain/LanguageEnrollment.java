@@ -24,7 +24,7 @@ public class LanguageEnrollment {
   Long id;
 
   @Column(name = "daily_goal_minutes")
-  Integer dailyGoalMinutes;
+  int dailyGoalMinutes;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "fk_user_id", nullable = false)

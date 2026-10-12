@@ -10,5 +10,5 @@ public class CefrProgressResponse {
   String currentLevel;
   String nextLevel;
   long minutesUntilNextLevel;
-  long progressPercent;
+  int progressPercent;
 }

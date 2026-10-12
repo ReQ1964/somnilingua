@@ -25,7 +25,8 @@ public class CefrService {
   }
 
   public CefrProgressResponse calculateCefrLevel(long totalMinutes, List<CefrLevel> cefrLevels) {
-    CefrLevel currentLevel = cefrLevels.stream().filter(level -> level.getMinutes() <= totalMinutes)
+    CefrLevel currentLevel = cefrLevels.stream()
+        .filter(level -> level.getMinutes() <= totalMinutes)
         .max(Comparator.comparingInt(CefrLevel::getMinutes))
         .orElseThrow(() -> new IllegalStateException("No matching CEFR level"));
 
@@ -39,7 +40,7 @@ public class CefrService {
           .currentLevel(currentLevel.getLevel())
           .nextLevel(null)
           .minutesUntilNextLevel(0L)
-          .progressPercent(100L)
+          .progressPercent(100)
           .build();
     }
 
@@ -48,7 +49,7 @@ public class CefrService {
 
     long completed = totalMinutes - currentLevel.getMinutes();
     long range = next.getMinutes() - currentLevel.getMinutes();
-    long progress = completed * 100 / range;
+    int progress = Math.toIntExact(completed * 100 / range);
 
     return CefrProgressResponse
         .builder()
