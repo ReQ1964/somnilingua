@@ -11,13 +11,15 @@ import java.util.List;
 @Getter
 @Setter
 public class PageResponse<T> {
+
   private List<T> data;
   private Meta meta;
 
   @AllArgsConstructor
   @Getter
   @Setter
-  private static class Meta {
+  public static class Meta {
+
     int page;
     int size;
     long totalElements;
@@ -26,6 +28,7 @@ public class PageResponse<T> {
 
 
   public static <T> PageResponse<T> of(Page<T> page) {
-    return new PageResponse<>(page.getContent(), new Meta(page.getNumber(), page.getSize(), page.getTotalElements(), page.getTotalPages()));
+    return new PageResponse<>(page.getContent(),
+        new Meta(page.getNumber(), page.getSize(), page.getTotalElements(), page.getTotalPages()));
   }
 }

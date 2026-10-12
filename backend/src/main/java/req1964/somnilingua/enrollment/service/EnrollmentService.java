@@ -81,7 +81,10 @@ public class EnrollmentService {
         Collectors.toMap(LanguageEnrollmentActivityStats::languageEnrollmentId,
             ActivityStatsMapper::toResponse));
 
-    List<CefrLevel> cefrLevels = cefrRepository.findAll();
+    List<CefrLevel> cefrLevels =
+        ids.isEmpty()
+            ? List.of()
+            : cefrRepository.findAll();
 
     return PageResponse.of(languageEnrollments
         .map(languageEnrollment -> {
