@@ -4,12 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.assertArg;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -229,7 +231,7 @@ class EnrollmentServiceTest {
     when(enrollmentRepository.findAllByUser(user, PAGEABLE))
         .thenReturn(page);
     when(enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(
-        List.of(ENROLLMENT_ID)))
+        eq(List.of(ENROLLMENT_ID)), any(LocalDate.class)))
         .thenReturn(stats);
     when(cefrRepository.findAll())
         .thenReturn(levels);
@@ -255,7 +257,8 @@ class EnrollmentServiceTest {
 
     verify(enrollmentRepository).findAllByUser(user, PAGEABLE);
     verify(enrollmentRepository)
-        .findActivityStatsByLanguageEnrollmentIds(List.of(ENROLLMENT_ID));
+        .findActivityStatsByLanguageEnrollmentIds(
+            eq(List.of(ENROLLMENT_ID)), any(LocalDate.class));
     verify(cefrService).calculateCefrLevel(100L, levels);
 
   }
@@ -291,7 +294,7 @@ class EnrollmentServiceTest {
     when(enrollmentRepository.findAllByUser(user, PAGEABLE))
         .thenReturn(page);
     when(enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(
-        List.of(ENROLLMENT_ID, 2L)))
+        eq(List.of(ENROLLMENT_ID, 2L)), any(LocalDate.class)))
         .thenReturn(stats);
     when(cefrRepository.findAll())
         .thenReturn(levels);
@@ -331,7 +334,8 @@ class EnrollmentServiceTest {
     verify(cefrService).calculateCefrLevel(100L, levels);
     verify(cefrService).calculateCefrLevel(500L, levels);
     verify(enrollmentRepository)
-        .findActivityStatsByLanguageEnrollmentIds(List.of(ENROLLMENT_ID, 2L));
+        .findActivityStatsByLanguageEnrollmentIds(
+            eq(List.of(ENROLLMENT_ID, 2L)), any(LocalDate.class));
   }
 
 
@@ -345,14 +349,6 @@ class EnrollmentServiceTest {
         new LanguageEnrollmentActivityStats(ENROLLMENT_ID, 10L, 100L),
         new LanguageEnrollmentActivityStats(2L, 10L, 100L));
 
-    List<CefrLevel> levels = List.of();
-    CefrProgressResponse progress = CefrProgressResponse.builder()
-        .currentLevel("A0")
-        .nextLevel("A1")
-        .minutesUntilNextLevel(2900L)
-        .progressPercent(3L)
-        .build();
-
     Page<LanguageEnrollment> page = new PageImpl<>(List.of(enrollment, enrollment2), PAGEABLE, 1);
 
     when(userRepository.findById(USER_ID))
@@ -360,19 +356,16 @@ class EnrollmentServiceTest {
     when(enrollmentRepository.findAllByUser(user, PAGEABLE))
         .thenReturn(page);
     when(enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(
-        List.of(ENROLLMENT_ID, 2L)))
+        eq(List.of(ENROLLMENT_ID, 2L)), any(LocalDate.class)))
         .thenReturn(stats);
-    when(cefrRepository.findAll())
-        .thenReturn(levels);
-    when(cefrService.calculateCefrLevel(100L, levels))
-        .thenReturn(progress);
 
     //when
     enrollmentService.getPaginatedLanguageEnrollments(PAGEABLE);
 
     //then
     verify(enrollmentRepository, times(1))
-        .findActivityStatsByLanguageEnrollmentIds(List.of(ENROLLMENT_ID, 2L));
+        .findActivityStatsByLanguageEnrollmentIds(
+            eq(List.of(ENROLLMENT_ID, 2L)), any(LocalDate.class));
   }
 
   @Test
@@ -393,7 +386,7 @@ class EnrollmentServiceTest {
     assertThat(result.getData()).isEmpty();
     assertThat(result.getMeta().getTotalElements()).isEqualTo(0);
     verify(enrollmentRepository, never())
-        .findActivityStatsByLanguageEnrollmentIds(any());
+        .findActivityStatsByLanguageEnrollmentIds(any(), any(LocalDate.class));
     verify(cefrRepository, never()).findAll();
     verifyNoInteractions(cefrService);
 
@@ -421,7 +414,7 @@ class EnrollmentServiceTest {
     when(enrollmentRepository.findAllByUser(user, PAGEABLE))
         .thenReturn(page);
     when(enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(
-        List.of(ENROLLMENT_ID)))
+        eq(List.of(ENROLLMENT_ID)), any(LocalDate.class)))
         .thenReturn(stats);
     when(cefrRepository.findAll()).thenReturn(levels);
     when(cefrService.calculateCefrLevel(0L, levels))

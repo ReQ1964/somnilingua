@@ -1,6 +1,7 @@
 package req1964.somnilingua.enrollment.service;
 
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,7 +76,7 @@ public class EnrollmentService {
     List<Long> ids = languageEnrollments.stream().map(LanguageEnrollment::getId).toList();
 
     List<LanguageEnrollmentActivityStats> stats = ids.isEmpty() ? List.of()
-        : enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(ids);
+        : enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(ids, LocalDate.now());
 
     Map<Long, ActivityStatsResponse> statsByLanguageEnrollmentId = stats.stream().collect(
         Collectors.toMap(LanguageEnrollmentActivityStats::languageEnrollmentId,

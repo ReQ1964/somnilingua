@@ -1,5 +1,6 @@
 package req1964.somnilingua.enrollment.repository;
 
+import java.time.LocalDate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Repository
 public interface EnrollmentRepository extends JpaRepository<LanguageEnrollment, Long> {
+
   boolean existsByUserAndLanguage(User user, Language language);
 
   Page<LanguageEnrollment> findAllByUser(User user, Pageable pageable);
@@ -22,7 +24,7 @@ public interface EnrollmentRepository extends JpaRepository<LanguageEnrollment, 
       SELECT new req1964.somnilingua.enrollment.dto.LanguageEnrollmentActivityStats(
           a.languageEnrollment.id,
           COALESCE(SUM(CASE
-              WHEN CAST(a.createdAt AS date) = CURRENT_DATE
+              WHEN CAST(a.createdAt AS date) = :today
               THEN a.minutes ELSE 0
           END), 0L),
           COALESCE(SUM(a.minutes), 0L)
@@ -31,5 +33,6 @@ public interface EnrollmentRepository extends JpaRepository<LanguageEnrollment, 
           WHERE a.languageEnrollment.id IN (:ids)
           GROUP BY a.languageEnrollment.id
       """)
-  List<LanguageEnrollmentActivityStats> findActivityStatsByLanguageEnrollmentIds(List<Long> ids);
+  List<LanguageEnrollmentActivityStats> findActivityStatsByLanguageEnrollmentIds(List<Long> ids,
+      LocalDate today);
 }
