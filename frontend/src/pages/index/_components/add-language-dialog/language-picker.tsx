@@ -12,7 +12,7 @@ import {
 } from '@/shared/components/ui/command.tsx';
 import { Check } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { LanguageResponse } from '@/api';
+import { LanguageResponse } from '@/api/api.ts';
 import { useTranslation } from 'react-i18next';
 import LanguagePickerSkeleton
   from '@/pages/index/_components/add-language-dialog/skeletons/language-picker-skeleton.tsx';

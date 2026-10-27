@@ -1,4 +1,4 @@
-import { LanguageEnrollmentResponse } from '@/api';
+import { LanguageEnrollmentResponse } from '@/api/api.ts';
 import { Card } from '@/shared/components/ui/card.tsx';
 import { Progress } from '@/shared/components/ui/progress.tsx';
 import { getLanguageFlag } from '@/shared/lib/language-flags.ts';

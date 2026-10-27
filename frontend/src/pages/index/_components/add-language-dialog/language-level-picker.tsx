@@ -5,7 +5,7 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Label } from '@/shared/components/ui/label.tsx';
 import { Input } from '@/shared/components/ui/input.tsx';
-import { CefrResponse } from '@/api';
+import { CefrResponse } from '@/api/api.ts';
 import LanguageLevelPickerSkeleton
   from '@/pages/index/_components/add-language-dialog/skeletons/language-level-picker-skeleton.tsx';
 import ErrorState from '@/shared/components/error-state.tsx';
