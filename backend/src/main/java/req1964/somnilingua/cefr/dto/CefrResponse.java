@@ -1,22 +1,30 @@
 package req1964.somnilingua.cefr.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
 
 @Value
 @Builder
 public class CefrResponse {
+  @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
   Long id;
 
+  @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
   String level;
 
-  Integer minutes;
+  @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+  int minutes;
 
-  Integer hours;
+  @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+  int hours;
 
-  Integer words;
+  @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+  int words;
 
+  @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
   String descriptionKey;
 
-  Integer order;
+  @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+  int order;
 }

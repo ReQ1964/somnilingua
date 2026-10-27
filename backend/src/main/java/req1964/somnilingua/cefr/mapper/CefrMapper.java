@@ -3,7 +3,7 @@ package req1964.somnilingua.cefr.mapper;
 import req1964.somnilingua.cefr.domain.CefrLevel;
 import req1964.somnilingua.cefr.dto.CefrResponse;
 
-import java.util.function.Function;
+import java.util.function.IntUnaryOperator;
 
 public class CefrMapper {
   public static CefrResponse toResponse(CefrLevel cefr) {
@@ -14,10 +14,10 @@ public class CefrMapper {
         .minutes(cefr.getMinutes())
         .level(cefr.getLevel())
         .words(cefr.getWords())
-        .hours(convertToHours.apply(cefr.getMinutes()))
+        .hours(convertToHours.applyAsInt(cefr.getMinutes()))
         .build();
   }
 
 
-  private static final Function<Integer, Integer> convertToHours = minutes -> minutes / 60;
+  private static final IntUnaryOperator convertToHours = minutes -> minutes / 60;
 }

@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Outlet } from 'react-router-dom';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { ThemeProvider } from '@/lib/theme.tsx';
-import Navbar from '@/components/navbar';
+import { TooltipProvider } from '@/shared/components/ui/tooltip';
+import { ThemeProvider } from '@/shared/lib/theme.tsx';
+import Navbar from '@/shared/components/navbar';
 import { Toaster } from 'sonner';
 
 const queryClient = new QueryClient();

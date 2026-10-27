@@ -18,14 +18,14 @@ public class CefrLevel {
   private String level;
 
   @Column(nullable = false)
-  private Integer minutes;
+  private int minutes;
 
   @Column(nullable = false)
-  private Integer words;
+  private int words;
 
   @Column(name = "description_key", nullable = false)
   private String descriptionKey;
 
   @Column(name = "sort_order", nullable = false, unique = true)
-  private Integer sortOrder;
+  private int sortOrder;
 }

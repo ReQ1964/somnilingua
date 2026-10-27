@@ -1,9 +1,16 @@
 package req1964.somnilingua.activity.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import req1964.somnilingua.activity.dto.ActivityType;
-import req1964.somnilingua.enrollment.domain.UserLanguage;
+import req1964.somnilingua.enrollment.domain.LanguageEnrollment;
+
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -17,18 +24,25 @@ public class Activity {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "fk_user_language_id", nullable = false)
-  private UserLanguage userLanguage;
+  @JoinColumn(name = "fk_language_enrollment_id", nullable = false)
+  private LanguageEnrollment languageEnrollment;
 
   @Enumerated(EnumType.STRING)
   private ActivityType type;
   private int minutes;
+
   private String notes;
 
-  public static Activity createStarterActivity(UserLanguage userLanguage, int minutes) {
+  @Column(name = "created_at", nullable = false, updatable = false, insertable = false)
+  private Instant createdAt;
+
+  @Column(name = "modified_at", updatable = false, insertable = false)
+  private Instant modifiedAt;
+
+  public static Activity createStarterActivity(LanguageEnrollment languageEnrollment, int minutes) {
     Activity activity = new Activity();
     activity.setType(ActivityType.OTHER);
-    activity.setUserLanguage(userLanguage);
+    activity.setLanguageEnrollment(languageEnrollment);
     activity.setMinutes(minutes);
     activity.setNotes("This is your chosen starter level. You can edit it anytime.");
     return activity;
