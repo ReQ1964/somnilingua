@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Configuration } from '@/api';
+import { Configuration } from '@/api/configuration.ts';
 import { BaseAPI } from '@/api/base.ts';
 import type { AxiosInstance } from 'axios';
 import { api } from '@/config/api.ts';

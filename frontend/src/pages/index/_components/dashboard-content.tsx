@@ -4,7 +4,7 @@ import DashboardHeader from '@/pages/index/_components/dashboard-header.tsx';
 import LanguageCardsEmptyState from '@/pages/index/_components/language-cards-empty-state.tsx';
 import LanguageCardsGrid from '@/pages/index/_components/language-cards-grid.tsx';
 import LanguageCardsLoading from '@/pages/index/_components/language-cards-loading.tsx';
-import { EnrollmentControllerApi } from '@/api';
+import { EnrollmentControllerApi } from '@/api/api.ts';
 import Paginator from '@/shared/components/paginator.tsx';
 import { useApiClient } from '@/shared/hooks/use-api-client.ts';
 import { usePageState } from '@/shared/hooks/use-page-state.ts';

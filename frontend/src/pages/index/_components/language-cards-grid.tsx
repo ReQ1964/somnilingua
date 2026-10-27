@@ -1,5 +1,5 @@
 import LanguageCard from '@/pages/index/_components/language-card.tsx';
-import { LanguageEnrollmentResponse } from '@/api';
+import { LanguageEnrollmentResponse } from '@/api/api.ts';
 
 type LanguageCardsGridProps = {
   enrollments: LanguageEnrollmentResponse[];

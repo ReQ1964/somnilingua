@@ -11,7 +11,7 @@ import { AnimatePresence } from 'framer-motion';
 import { cn } from '@/shared/lib/utils.ts';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useApiClient } from '@/shared/hooks/use-api-client.ts';
-import { EnrollmentControllerApi, LanguageApi, CEFRControllerApi } from '@/api';
+import { EnrollmentControllerApi, LanguageApi, CEFRControllerApi } from '@/api/api.ts';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import LanguagePicker from '@/pages/index/_components/add-language-dialog/language-picker.tsx';
 import { toast } from 'sonner';

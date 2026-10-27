@@ -1,4 +1,4 @@
-import type { Pageable } from '@/api';
+import type { Pageable } from '@/api/api.ts';
 import type { PageState } from '@/shared/hooks/use-page-state.ts';
 import { useMemo } from 'react';
 
