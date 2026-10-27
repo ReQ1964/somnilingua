@@ -27,8 +27,16 @@ jobs:
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
 
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Generate API client
+        run: pnpm run generate:frozen-definitions
 
       - name: Run tests
         run: pnpm test
