@@ -8,8 +8,29 @@ servers:
 tags:
 - name: Language
   description: Api to manage languages
+- name: CEFR Controller
+  description: Operations related to CEFR levels
 paths:
   /api/enrollments:
+    get:
+      tags:
+      - enrollment-controller
+      summary: Get paginated list of user's enrollments
+      description: Returns a paginated and filtered list of languages for a user.
+      operationId: getPaginatedLanguageEnrollments
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageResponseLanguageEnrollmentResponse"
     post:
       tags:
       - enrollment-controller
@@ -48,7 +69,9 @@ paths:
   /api/cefrs:
     get:
       tags:
-      - cefr-controller
+      - CEFR Controller
+      summary: Get all CEFR levels
+      description: Returns a list of all CEFR entries available in the system
       operationId: getAllCefrs
       responses:
         "200":
@@ -70,7 +93,6 @@ components:
         starterMinutes:
           type: integer
           format: int32
-          minimum: 1
         dailyGoalMinutes:
           type: integer
           format: int32
@@ -100,6 +122,104 @@ components:
       - code
       - id
       - name
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+        sort:
+          type: array
+          items:
+            type: string
+    ActivityStatsResponse:
+      type: object
+      properties:
+        todayMinutes:
+          type: integer
+          format: int64
+        totalMinutes:
+          type: integer
+          format: int64
+      required:
+      - todayMinutes
+      - totalMinutes
+    CefrProgressResponse:
+      type: object
+      properties:
+        currentLevel:
+          type: string
+        nextLevel:
+          type: string
+          nullable: true
+        minutesUntilNextLevel:
+          type: integer
+          format: int64
+        progressPercent:
+          type: integer
+          format: int32
+      required:
+      - currentLevel
+      - minutesUntilNextLevel
+      - progressPercent
+    LanguageEnrollmentResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        dailyGoalMinutes:
+          type: integer
+          format: int32
+        activityStats:
+          $ref: "#/components/schemas/ActivityStatsResponse"
+        language:
+          $ref: "#/components/schemas/LanguageResponse"
+        cefrProgress:
+          $ref: "#/components/schemas/CefrProgressResponse"
+      required:
+      - activityStats
+      - cefrProgress
+      - dailyGoalMinutes
+      - id
+      - language
+    Meta:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+      required:
+      - page
+      - size
+      - totalElements
+      - totalPages
+    PageResponseLanguageEnrollmentResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/LanguageEnrollmentResponse"
+        meta:
+          $ref: "#/components/schemas/Meta"
+      required:
+      - data
+      - meta
     CefrResponse:
       type: object
       properties:
@@ -122,3 +242,11 @@ components:
         order:
           type: integer
           format: int32
+      required:
+      - descriptionKey
+      - hours
+      - id
+      - level
+      - minutes
+      - order
+      - words

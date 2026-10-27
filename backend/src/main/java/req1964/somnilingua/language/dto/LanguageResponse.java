@@ -10,15 +10,25 @@ import lombok.*;
 public class LanguageResponse {
 
   @NotNull
-  @Schema(description = "Internal id", example = "1")
+  @Schema(
+      description = "Internal id",
+      example = "1",
+      requiredMode = Schema.RequiredMode.REQUIRED)
   Long id;
 
   @NotNull
-  @Schema(description = "Display name", example = "Spanish")
+  @Schema(
+      description = "Display name",
+      example = "Spanish",
+      requiredMode = Schema.RequiredMode.REQUIRED)
   String name;
 
   @NotNull
-  @Schema(description = "Language code", example = "es", maxLength = 10)
+  @Schema(
+      description = "Language code",
+      example = "es",
+      maxLength = 10,
+      requiredMode = Schema.RequiredMode.REQUIRED)
   String code;
 
 }

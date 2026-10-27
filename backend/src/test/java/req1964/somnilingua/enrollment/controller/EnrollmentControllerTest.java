@@ -59,7 +59,7 @@ class EnrollmentControllerTest {
 
   @Test
   void createEnrollment_withInvalidData_returns400_withValidation_Errors() throws Exception {
-    CreateEnrollmentRequest invalidRequest = new CreateEnrollmentRequest(1L, 0, 0);
+    CreateEnrollmentRequest invalidRequest = new CreateEnrollmentRequest(1L, -10, -10);
 
     mockMvc.perform(post("/api/enrollments")
             .contentType(MediaType.APPLICATION_JSON)

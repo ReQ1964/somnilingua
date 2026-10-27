@@ -10,8 +10,9 @@ public class CreateEnrollmentRequest {
   @NotNull
   Long languageId;
   @NotNull
+  @Min(0)
   Integer starterMinutes;
   @NotNull
-  @Min(1)
+  @Min(0)
   Integer dailyGoalMinutes;
 }

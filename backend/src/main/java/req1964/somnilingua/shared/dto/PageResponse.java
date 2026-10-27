@@ -1,5 +1,6 @@
 package req1964.somnilingua.shared.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,9 @@ import java.util.List;
 @Setter
 public class PageResponse<T> {
 
+  @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
   private List<T> data;
+  @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
   private Meta meta;
 
   @AllArgsConstructor
@@ -20,9 +23,13 @@ public class PageResponse<T> {
   @Setter
   public static class Meta {
 
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     int page;
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     int size;
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     long totalElements;
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     int totalPages;
   }
 
