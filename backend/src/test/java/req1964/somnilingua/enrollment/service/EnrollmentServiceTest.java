@@ -228,7 +228,7 @@ class EnrollmentServiceTest {
 
     when(userRepository.findById(USER_ID))
         .thenReturn(Optional.of(user));
-    when(enrollmentRepository.findAllByUser(user, PAGEABLE))
+    when(enrollmentRepository.findPaginatedByUser(user, PAGEABLE))
         .thenReturn(page);
     when(enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(
         eq(List.of(ENROLLMENT_ID)), any(LocalDate.class)))
@@ -255,7 +255,7 @@ class EnrollmentServiceTest {
     assertThat(response.getCefrProgress().getNextLevel()).isEqualTo("A1");
     assertThat(response.getCefrProgress().getProgressPercent()).isEqualTo(3L);
 
-    verify(enrollmentRepository).findAllByUser(user, PAGEABLE);
+    verify(enrollmentRepository).findPaginatedByUser(user, PAGEABLE);
     verify(enrollmentRepository)
         .findActivityStatsByLanguageEnrollmentIds(
             eq(List.of(ENROLLMENT_ID)), any(LocalDate.class));
@@ -291,7 +291,7 @@ class EnrollmentServiceTest {
 
     when(userRepository.findById(USER_ID))
         .thenReturn(Optional.of(user));
-    when(enrollmentRepository.findAllByUser(user, PAGEABLE))
+    when(enrollmentRepository.findPaginatedByUser(user, PAGEABLE))
         .thenReturn(page);
     when(enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(
         eq(List.of(ENROLLMENT_ID, 2L)), any(LocalDate.class)))
@@ -330,7 +330,7 @@ class EnrollmentServiceTest {
     assertThat(response2.getCefrProgress().getNextLevel()).isEqualTo("A2");
     assertThat(response2.getCefrProgress().getProgressPercent()).isEqualTo(50L);
 
-    verify(enrollmentRepository).findAllByUser(user, PAGEABLE);
+    verify(enrollmentRepository).findPaginatedByUser(user, PAGEABLE);
     verify(cefrService).calculateCefrLevel(100L, levels);
     verify(cefrService).calculateCefrLevel(500L, levels);
     verify(enrollmentRepository)
@@ -353,7 +353,7 @@ class EnrollmentServiceTest {
 
     when(userRepository.findById(USER_ID))
         .thenReturn(Optional.of(user));
-    when(enrollmentRepository.findAllByUser(user, PAGEABLE))
+    when(enrollmentRepository.findPaginatedByUser(user, PAGEABLE))
         .thenReturn(page);
     when(enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(
         eq(List.of(ENROLLMENT_ID, 2L)), any(LocalDate.class)))
@@ -375,7 +375,7 @@ class EnrollmentServiceTest {
 
     when(userRepository.findById(USER_ID))
         .thenReturn(Optional.of(user));
-    when(enrollmentRepository.findAllByUser(user, PAGEABLE))
+    when(enrollmentRepository.findPaginatedByUser(user, PAGEABLE))
         .thenReturn(page);
 
     //when
@@ -411,7 +411,7 @@ class EnrollmentServiceTest {
 
     when(userRepository.findById(USER_ID))
         .thenReturn(Optional.of(user));
-    when(enrollmentRepository.findAllByUser(user, PAGEABLE))
+    when(enrollmentRepository.findPaginatedByUser(user, PAGEABLE))
         .thenReturn(page);
     when(enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(
         eq(List.of(ENROLLMENT_ID)), any(LocalDate.class)))

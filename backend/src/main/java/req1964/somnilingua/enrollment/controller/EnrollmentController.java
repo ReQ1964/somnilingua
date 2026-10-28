@@ -3,20 +3,27 @@ package req1964.somnilingua.enrollment.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import req1964.somnilingua.enrollment.dto.CreateEnrollmentRequest;
 import req1964.somnilingua.enrollment.dto.LanguageEnrollmentResponse;
 import req1964.somnilingua.enrollment.service.EnrollmentService;
+import req1964.somnilingua.language.dto.LanguageResponse;
 import req1964.somnilingua.shared.dto.PageResponse;
 
 @RestController
 @RequestMapping("/api/enrollments")
 @RequiredArgsConstructor
 public class EnrollmentController {
+
   private final EnrollmentService enrollmentService;
 
   @Operation(
@@ -27,7 +34,8 @@ public class EnrollmentController {
   @ApiResponse(responseCode = "404", description = "User or Language not found")
   @ApiResponse(responseCode = "409", description = "User already enrolled in language")
   @PostMapping
-  public ResponseEntity<Void> createEnrollment(@Valid @RequestBody CreateEnrollmentRequest request) {
+  public ResponseEntity<Void> createEnrollment(
+      @Valid @RequestBody CreateEnrollmentRequest request) {
     enrollmentService.enroll(request);
 
     return ResponseEntity
@@ -40,7 +48,17 @@ public class EnrollmentController {
       description = "Returns a paginated and filtered list of languages for a user."
   )
   @GetMapping()
-  public PageResponse<LanguageEnrollmentResponse> getPaginatedLanguageEnrollments(Pageable pageable) {
+  public PageResponse<LanguageEnrollmentResponse> getPaginatedLanguageEnrollments(
+      Pageable pageable) {
     return enrollmentService.getPaginatedLanguageEnrollments(pageable);
+  }
+
+  @Operation(
+      summary = "Get list of user's enrollments",
+      description = "Returns a list of languages for a user."
+  )
+  @GetMapping("/all")
+  public List<LanguageResponse> getLanguageEnrollmentsByUser() {
+    return enrollmentService.getAllLanguageEnrollemnts();
   }
 }

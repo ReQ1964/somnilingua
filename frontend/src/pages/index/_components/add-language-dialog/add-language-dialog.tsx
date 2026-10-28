@@ -21,6 +21,11 @@ import LanguageLevelPicker, {
 import DailyGoalInput from '@/pages/index/_components/add-language-dialog/daily-goal-input.tsx';
 import BottomActions from '@/pages/index/_components/add-language-dialog/bottom-actions.tsx';
 import { getApiErrorMessage } from '@/shared/utils/api-error.ts';
+import {
+  CREATE_ENROLLMENT,
+  ENROLLMENTS_LIST,
+  LANGUAGES_LIST,
+} from '@/shared/constants/queryKeys.ts';
 
 interface AddLanguageDialogValues {
   languageId: number | null;
@@ -32,9 +37,11 @@ interface AddLanguageDialogValues {
 export default function AddLanguageDialog({
                                             open,
                                             onOpenChange,
+                                            userEnrolledLanguagesIds,
                                           }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
+  userEnrolledLanguagesIds: number[]
 }) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -51,8 +58,8 @@ export default function AddLanguageDialog({
     isError: languagesIsError,
     refetch: refetchLanguages,
   } = useQuery({
-    queryFn: languagesApi.getLanguages,
-    queryKey: ['languagesApi.getLanguages'],
+    queryFn: () => languagesApi.getLanguages({ exclude: userEnrolledLanguagesIds }),
+    queryKey: [LANGUAGES_LIST, userEnrolledLanguagesIds],
     select: (data) => data.data,
     enabled: open,
   });
@@ -105,10 +112,10 @@ export default function AddLanguageDialog({
         },
       });
     },
-    mutationKey: ['enrollmentApi.createEnrollment'],
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['enrollmentApi.getPaginatedLanguageEnrollments'],
+    mutationKey: [CREATE_ENROLLMENT],
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [ENROLLMENTS_LIST],
       });
       toast.success(t('addLang.success'));
       reset();

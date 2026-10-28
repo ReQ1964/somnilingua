@@ -20,6 +20,7 @@ import req1964.somnilingua.enrollment.mapper.ActivityStatsMapper;
 import req1964.somnilingua.enrollment.mapper.LanguageEnrollmentMapper;
 import req1964.somnilingua.enrollment.repository.EnrollmentRepository;
 import req1964.somnilingua.language.domain.Language;
+import req1964.somnilingua.language.dto.LanguageResponse;
 import req1964.somnilingua.language.repository.LanguageRepository;
 import req1964.somnilingua.shared.dto.PageResponse;
 import req1964.somnilingua.shared.exception.ConflictException;
@@ -67,11 +68,21 @@ public class EnrollmentService {
     enrollmentRepository.save(languageEnrollment);
   }
 
+  public List<LanguageResponse> getAllLanguageEnrollemnts() {
+    User user = userRepository.findById(DEV_USER_ID)
+        .orElseThrow(() -> new ResourceNotFoundException("User", DEV_USER_ID));
+
+    return enrollmentRepository.findAllByUser(user)
+        .stream()
+        .map(LanguageEnrollmentMapper::toLanguageResponse)
+        .collect(Collectors.toList());
+  }
+
   public PageResponse<LanguageEnrollmentResponse> getPaginatedLanguageEnrollments(
       Pageable pageable) {
     User user = userRepository.findById(DEV_USER_ID)
         .orElseThrow(() -> new ResourceNotFoundException("User", DEV_USER_ID));
-    Page<LanguageEnrollment> languageEnrollments = enrollmentRepository.findAllByUser(user,
+    Page<LanguageEnrollment> languageEnrollments = enrollmentRepository.findPaginatedByUser(user,
         pageable);
     List<Long> ids = languageEnrollments.stream().map(LanguageEnrollment::getId).toList();
 

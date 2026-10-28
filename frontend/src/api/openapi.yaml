@@ -57,6 +57,31 @@ paths:
       summary: List of all languages
       description: It returns a list of all the available languages
       operationId: getLanguages
+      parameters:
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LanguageResponse"
+  /api/enrollments/all:
+    get:
+      tags:
+      - enrollment-controller
+      summary: Get list of user's enrollments
+      description: Returns a list of languages for a user.
+      operationId: getLanguageEnrollmentsByUser
       responses:
         "200":
           description: OK
@@ -93,10 +118,11 @@ components:
         starterMinutes:
           type: integer
           format: int32
+          minimum: 0
         dailyGoalMinutes:
           type: integer
           format: int32
-          minimum: 1
+          minimum: 0
       required:
       - dailyGoalMinutes
       - languageId
@@ -156,7 +182,6 @@ components:
           type: string
         nextLevel:
           type: string
-          nullable: true
         minutesUntilNextLevel:
           type: integer
           format: int64

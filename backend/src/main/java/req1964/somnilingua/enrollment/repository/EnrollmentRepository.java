@@ -18,7 +18,9 @@ public interface EnrollmentRepository extends JpaRepository<LanguageEnrollment, 
 
   boolean existsByUserAndLanguage(User user, Language language);
 
-  Page<LanguageEnrollment> findAllByUser(User user, Pageable pageable);
+  Page<LanguageEnrollment> findPaginatedByUser(User user, Pageable pageable);
+
+  List<LanguageEnrollment> findAllByUser(User user);
 
   @Query("""
       SELECT new req1964.somnilingua.enrollment.dto.LanguageEnrollmentActivityStats(

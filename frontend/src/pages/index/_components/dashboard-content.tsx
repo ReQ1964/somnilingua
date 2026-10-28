@@ -12,6 +12,7 @@ import { usePaginator } from '@/shared/hooks/use-paginator.ts';
 import { useQueryParams } from '@/shared/hooks/use-query-params.ts';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { ENROLLMENTS_LIST, USER_LANGUAGES_LIST } from '@/shared/constants/queryKeys.ts';
 
 
 export default function DashboardContent() {
@@ -22,8 +23,15 @@ export default function DashboardContent() {
     pagination,
   });
 
+  const { data: userEnrolledLanguageIds } = useQuery({
+    queryKey: [USER_LANGUAGES_LIST],
+    queryFn: () =>
+      enrollmentApi.getLanguageEnrollmentsByUser(),
+    select: (response) => response.data.map(item => item.id),
+  });
+
   const { data: enrollmentsPage, isLoading } = useQuery({
-    queryKey: ['enrollments', 'list', queryParams],
+    queryKey: [ENROLLMENTS_LIST, queryParams],
     queryFn: () =>
       enrollmentApi.getPaginatedLanguageEnrollments(queryParams),
     select: (response) => response.data,
@@ -54,7 +62,8 @@ export default function DashboardContent() {
         <LanguageCardsGrid enrollments={enrollments} />
       )}
 
-      <AddLanguageDialog open={open} onOpenChange={setOpen} />
+      <AddLanguageDialog open={open} onOpenChange={setOpen}
+                         userEnrolledLanguagesIds={userEnrolledLanguageIds} />
     </main>
   );
 }
