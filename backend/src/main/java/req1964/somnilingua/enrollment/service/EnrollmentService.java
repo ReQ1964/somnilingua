@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import req1964.somnilingua.activity.domain.Activity;
 import req1964.somnilingua.cefr.domain.CefrLevel;
@@ -16,7 +17,9 @@ import req1964.somnilingua.enrollment.dto.LanguageEnrollmentActivityStats;
 import req1964.somnilingua.enrollment.dto.ActivityStatsResponse;
 import req1964.somnilingua.enrollment.dto.CreateEnrollmentRequest;
 import req1964.somnilingua.enrollment.dto.LanguageEnrollmentResponse;
+import req1964.somnilingua.enrollment.dto.LanguageEnrollmentsSearchCriteria;
 import req1964.somnilingua.enrollment.dto.LanguageEnrollmentsSearchRequest;
+import req1964.somnilingua.enrollment.dto.LanguageEnrollmentsSearchRequestSpecifications;
 import req1964.somnilingua.enrollment.mapper.ActivityStatsMapper;
 import req1964.somnilingua.enrollment.mapper.LanguageEnrollmentMapper;
 import req1964.somnilingua.enrollment.repository.EnrollmentRepository;
@@ -80,13 +83,18 @@ public class EnrollmentService {
   }
 
   public PageResponse<LanguageEnrollmentResponse> getPaginatedLanguageEnrollments(
-      Pageable request) {
+      LanguageEnrollmentsSearchRequest request) {
     User user = userRepository.findById(DEV_USER_ID)
         .orElseThrow(() -> new ResourceNotFoundException("User", DEV_USER_ID));
 
-    // todo dodaj specke
-    Page<LanguageEnrollment> languageEnrollments = enrollmentRepository.findPaginatedByUser(user,
-        request);
+    List<CefrLevel> cefrLevels = cefrRepository.findAll();
+
+    Specification<LanguageEnrollment> specs = LanguageEnrollmentsSearchRequestSpecifications.build(
+        request.getCriteria(), cefrLevels, user);
+
+    Page<LanguageEnrollment> languageEnrollments = enrollmentRepository.findAll(specs,
+        request.toPageable());
+    
     List<Long> ids = languageEnrollments.stream().map(LanguageEnrollment::getId).toList();
 
     List<LanguageEnrollmentActivityStats> stats = ids.isEmpty() ? List.of()
@@ -95,11 +103,6 @@ public class EnrollmentService {
     Map<Long, ActivityStatsResponse> statsByLanguageEnrollmentId = stats.stream().collect(
         Collectors.toMap(LanguageEnrollmentActivityStats::languageEnrollmentId,
             ActivityStatsMapper::toResponse));
-
-    List<CefrLevel> cefrLevels =
-        ids.isEmpty()
-            ? List.of()
-            : cefrRepository.findAll();
 
     return PageResponse.of(languageEnrollments
         .map(languageEnrollment -> {

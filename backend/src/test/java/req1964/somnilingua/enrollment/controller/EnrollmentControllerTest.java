@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -15,6 +14,7 @@ import req1964.somnilingua.cefr.dto.CefrProgressResponse;
 import req1964.somnilingua.enrollment.dto.ActivityStatsResponse;
 import req1964.somnilingua.enrollment.dto.CreateEnrollmentRequest;
 import req1964.somnilingua.enrollment.dto.LanguageEnrollmentResponse;
+import req1964.somnilingua.enrollment.dto.LanguageEnrollmentsSearchRequest;
 import req1964.somnilingua.enrollment.service.EnrollmentService;
 import req1964.somnilingua.language.dto.LanguageResponse;
 import req1964.somnilingua.shared.dto.PageResponse;
@@ -147,12 +147,13 @@ class EnrollmentControllerTest {
         new PageResponse.Meta(0, 10, 1, 1)
     );
 
-    when(enrollmentService.getPaginatedLanguageEnrollments(any(Pageable.class)))
+    when(enrollmentService.getPaginatedLanguageEnrollments(any(LanguageEnrollmentsSearchRequest.class)))
         .thenReturn(response);
 
     mockMvc.perform(get("/api/enrollments")
             .param("page", "0")
-            .param("size", "10"))
+            .param("size", "10")
+            .param("sort", "name,asc"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.data[0].id").value(10))
         .andExpect(jsonPath("$.data[0].dailyGoalMinutes").value(30))

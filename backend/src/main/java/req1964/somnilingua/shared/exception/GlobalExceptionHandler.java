@@ -1,5 +1,6 @@
 package req1964.somnilingua.shared.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(RuntimeException.class)
-  public ResponseEntity<ApiError> handleRuntimeException() {
+  public ResponseEntity<ApiError> handleRuntimeException(RuntimeException ex) {
+    log.error("Unhandled runtime exception", ex);
 
     ApiError error = ApiError.builder()
         .message("Internal server error")

@@ -50,7 +50,7 @@ public class EnrollmentController {
   )
   @GetMapping()
   public PageResponse<LanguageEnrollmentResponse> getPaginatedLanguageEnrollments(
-      Pageable request) {
+      LanguageEnrollmentsSearchRequest request) {
     return enrollmentService.getPaginatedLanguageEnrollments(request);
   }
 

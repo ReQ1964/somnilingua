@@ -1,6 +1,5 @@
 package req1964.somnilingua.shared.dto;
 
-import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,13 +12,13 @@ public interface PageableRequest {
 
   Integer getSize();
 
-  List<String> getSort();
+  String getSort();
 
   Class<? extends Enum<? extends SortFieldMapping>> getSortFieldMappings();
 
   default Pageable toPageable() {
 
-    int p = (getPage() != null && getPage() > 0) ? getPage() : 1;
+    int p = (getPage() != null && getPage() > 0) ? getPage() : 0;
     int s = (getSize() != null && getSize() > 0) ? getSize() : 10;
     Sort sort = SortUtils.parseSort(getSort(), getSortFieldMappings());
 

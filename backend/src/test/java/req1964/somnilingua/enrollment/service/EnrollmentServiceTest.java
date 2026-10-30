@@ -24,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import req1964.somnilingua.activity.domain.Activity;
 import req1964.somnilingua.activity.dto.ActivityType;
 import req1964.somnilingua.cefr.domain.CefrLevel;
@@ -34,6 +35,7 @@ import req1964.somnilingua.enrollment.domain.LanguageEnrollment;
 import req1964.somnilingua.enrollment.dto.CreateEnrollmentRequest;
 import req1964.somnilingua.enrollment.dto.LanguageEnrollmentActivityStats;
 import req1964.somnilingua.enrollment.dto.LanguageEnrollmentResponse;
+import req1964.somnilingua.enrollment.dto.LanguageEnrollmentsSearchRequest;
 import req1964.somnilingua.enrollment.repository.EnrollmentRepository;
 import req1964.somnilingua.language.domain.Language;
 import req1964.somnilingua.language.repository.LanguageRepository;
@@ -228,7 +230,7 @@ class EnrollmentServiceTest {
 
     when(userRepository.findById(USER_ID))
         .thenReturn(Optional.of(user));
-    when(enrollmentRepository.findPaginatedByUser(user, PAGEABLE))
+    when(enrollmentRepository.findAll(any(Specification.class), eq(PAGEABLE)))
         .thenReturn(page);
     when(enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(
         eq(List.of(ENROLLMENT_ID)), any(LocalDate.class)))
@@ -240,7 +242,7 @@ class EnrollmentServiceTest {
 
     //when
     PageResponse<LanguageEnrollmentResponse> result =
-        enrollmentService.getPaginatedLanguageEnrollments(PAGEABLE);
+        enrollmentService.getPaginatedLanguageEnrollments(createSearchRequest());
 
     //then
     assertThat(result).isNotNull();
@@ -255,7 +257,7 @@ class EnrollmentServiceTest {
     assertThat(response.getCefrProgress().getNextLevel()).isEqualTo("A1");
     assertThat(response.getCefrProgress().getProgressPercent()).isEqualTo(3L);
 
-    verify(enrollmentRepository).findPaginatedByUser(user, PAGEABLE);
+    verify(enrollmentRepository).findAll(any(Specification.class), eq(PAGEABLE));
     verify(enrollmentRepository)
         .findActivityStatsByLanguageEnrollmentIds(
             eq(List.of(ENROLLMENT_ID)), any(LocalDate.class));
@@ -291,8 +293,10 @@ class EnrollmentServiceTest {
 
     when(userRepository.findById(USER_ID))
         .thenReturn(Optional.of(user));
-    when(enrollmentRepository.findPaginatedByUser(user, PAGEABLE))
+    when(enrollmentRepository.findAll(any(Specification.class), eq(PAGEABLE)))
         .thenReturn(page);
+    when(cefrRepository.findAll())
+        .thenReturn(List.of());
     when(enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(
         eq(List.of(ENROLLMENT_ID, 2L)), any(LocalDate.class)))
         .thenReturn(stats);
@@ -305,7 +309,7 @@ class EnrollmentServiceTest {
 
     //when
     PageResponse<LanguageEnrollmentResponse> result =
-        enrollmentService.getPaginatedLanguageEnrollments(PAGEABLE);
+        enrollmentService.getPaginatedLanguageEnrollments(createSearchRequest());
 
     //then
     assertThat(result).isNotNull();
@@ -330,7 +334,7 @@ class EnrollmentServiceTest {
     assertThat(response2.getCefrProgress().getNextLevel()).isEqualTo("A2");
     assertThat(response2.getCefrProgress().getProgressPercent()).isEqualTo(50L);
 
-    verify(enrollmentRepository).findPaginatedByUser(user, PAGEABLE);
+    verify(enrollmentRepository).findAll(any(Specification.class), eq(PAGEABLE));
     verify(cefrService).calculateCefrLevel(100L, levels);
     verify(cefrService).calculateCefrLevel(500L, levels);
     verify(enrollmentRepository)
@@ -353,14 +357,14 @@ class EnrollmentServiceTest {
 
     when(userRepository.findById(USER_ID))
         .thenReturn(Optional.of(user));
-    when(enrollmentRepository.findPaginatedByUser(user, PAGEABLE))
+    when(enrollmentRepository.findAll(any(Specification.class), eq(PAGEABLE)))
         .thenReturn(page);
     when(enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(
         eq(List.of(ENROLLMENT_ID, 2L)), any(LocalDate.class)))
         .thenReturn(stats);
 
     //when
-    enrollmentService.getPaginatedLanguageEnrollments(PAGEABLE);
+    enrollmentService.getPaginatedLanguageEnrollments(createSearchRequest());
 
     //then
     verify(enrollmentRepository, times(1))
@@ -375,19 +379,19 @@ class EnrollmentServiceTest {
 
     when(userRepository.findById(USER_ID))
         .thenReturn(Optional.of(user));
-    when(enrollmentRepository.findPaginatedByUser(user, PAGEABLE))
+    when(enrollmentRepository.findAll(any(Specification.class), eq(PAGEABLE)))
         .thenReturn(page);
 
     //when
     PageResponse<LanguageEnrollmentResponse> result =
-        enrollmentService.getPaginatedLanguageEnrollments(PAGEABLE);
+        enrollmentService.getPaginatedLanguageEnrollments(createSearchRequest());
 
     //then
     assertThat(result.getData()).isEmpty();
     assertThat(result.getMeta().getTotalElements()).isEqualTo(0);
     verify(enrollmentRepository, never())
         .findActivityStatsByLanguageEnrollmentIds(any(), any(LocalDate.class));
-    verify(cefrRepository, never()).findAll();
+    verify(cefrRepository).findAll();
     verifyNoInteractions(cefrService);
 
   }
@@ -411,7 +415,7 @@ class EnrollmentServiceTest {
 
     when(userRepository.findById(USER_ID))
         .thenReturn(Optional.of(user));
-    when(enrollmentRepository.findPaginatedByUser(user, PAGEABLE))
+    when(enrollmentRepository.findAll(any(Specification.class), eq(PAGEABLE)))
         .thenReturn(page);
     when(enrollmentRepository.findActivityStatsByLanguageEnrollmentIds(
         eq(List.of(ENROLLMENT_ID)), any(LocalDate.class)))
@@ -422,7 +426,7 @@ class EnrollmentServiceTest {
 
     //when
     PageResponse<LanguageEnrollmentResponse> response = enrollmentService.getPaginatedLanguageEnrollments(
-        PAGEABLE);
+        createSearchRequest());
 
     //then
     assertThat(response).isNotNull();
@@ -442,7 +446,7 @@ class EnrollmentServiceTest {
 
     //then
     assertThatThrownBy(
-        () -> enrollmentService.getPaginatedLanguageEnrollments(PAGEABLE)).isInstanceOf(
+        () -> enrollmentService.getPaginatedLanguageEnrollments(createSearchRequest())).isInstanceOf(
         ResourceNotFoundException.class);
     verifyNoInteractions(enrollmentRepository, cefrRepository, cefrService);
   }
@@ -477,6 +481,13 @@ class EnrollmentServiceTest {
 
   private CreateEnrollmentRequest createValidRequest() {
     return new CreateEnrollmentRequest(LANGUAGE_ID, STARTER_MINUTES, DAILY_GOAL_MINUTES);
+  }
+
+  private LanguageEnrollmentsSearchRequest createSearchRequest() {
+    LanguageEnrollmentsSearchRequest request = new LanguageEnrollmentsSearchRequest();
+    request.setPage(0);
+    request.setSize(10);
+    return request;
   }
 
 }

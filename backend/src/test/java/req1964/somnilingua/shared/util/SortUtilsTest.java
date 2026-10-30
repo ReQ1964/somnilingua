@@ -3,7 +3,6 @@ package req1964.somnilingua.shared.util;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-import java.util.Collections;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +25,7 @@ public class SortUtilsTest {
 
   @Test
   void shouldRejectUnsupportedRequestProperty() {
-    List<String> sort = List.of("notAllowed,asc");
+    String sort = "notAllowed,asc";
 
     assertThatThrownBy(() -> SortUtils.parseSort(sort, TestSortFieldMapping.class)).isInstanceOf(
         IllegalArgumentException.class);
@@ -35,7 +34,7 @@ public class SortUtilsTest {
 
   @Test
   void shouldMapRequestPropertyToEntityPath() {
-    List<String> sort = List.of("name,desc");
+    String sort = "name,desc";
 
     Sort result = SortUtils.parseSort(sort, TestSortFieldMapping.class);
 
@@ -48,7 +47,7 @@ public class SortUtilsTest {
 
   @Test
   void shouldKeepRequestPropertyWhenSortFieldMappingsAreNotProvided() {
-    List<String> sort = List.of("name,desc");
+    String sort = "name,desc";
 
     Sort result = SortUtils.parseSort(sort, null);
 
@@ -59,8 +58,8 @@ public class SortUtilsTest {
   }
 
   @Test
-  void shouldReturnUnsortedWhenSortListIsEmpty() {
-    List<String> sort = Collections.emptyList();
+  void shouldReturnUnsortedWhenSortStringIsEmpty() {
+    String sort = "";
 
     Sort result = SortUtils.parseSort(sort, TestSortFieldMapping.class);
 
@@ -77,7 +76,7 @@ public class SortUtilsTest {
 
   @Test
   void shouldDefaultDirectionToAscendingWhenDirectionIsMissing() {
-    List<String> sort = List.of("name");
+    String sort = "name";
 
     Sort result = SortUtils.parseSort(sort, TestSortFieldMapping.class);
 
@@ -88,39 +87,15 @@ public class SortUtilsTest {
 
   @Test
   void shouldRejectInvalidSortDirection() {
-    List<String> sort = List.of("name,invalidDirection");
+    String sort = "name,invalidDirection";
 
     assertThatThrownBy(() -> SortUtils.parseSort(sort, TestSortFieldMapping.class)).isInstanceOf(
         IllegalArgumentException.class);
-  }
-
-  @Test
-  void shouldRejectUnsupportedRequestPropertyWhenMultipleSortsAreProvided() {
-    List<String> sort = List.of("name,asc", "notAllowed,desc");
-
-    assertThatThrownBy(() -> SortUtils.parseSort(sort, TestSortFieldMapping.class)).isInstanceOf(
-        IllegalArgumentException.class);
-  }
-
-  @Test
-  void shouldMapMultipleRequestPropertiesToEntityPaths() {
-    List<String> sort = List.of("name,asc", "createdAt,desc");
-
-    Sort result = SortUtils.parseSort(sort, TestSortFieldMapping.class);
-
-    List<Sort.Order> orders = result.toList();
-
-    assertThat(orders.getFirst().getProperty()).isEqualTo(
-        TestSortFieldMapping.NAME.getEntityPath());
-    assertThat(orders.getFirst().getDirection()).isEqualTo(Direction.ASC);
-    assertThat(orders.get(1).getProperty()).isEqualTo(
-        TestSortFieldMapping.CREATED_AT.getEntityPath());
-    assertThat(orders.get(1).getDirection()).isEqualTo(Direction.DESC);
   }
 
   @Test
   void shouldTrimWhitespaceAroundRequestPropertyAndDirection() {
-    List<String> sort = List.of(" name ,asc ");
+    String sort = " name ,asc ";
 
     Sort result = SortUtils.parseSort(sort, TestSortFieldMapping.class);
 

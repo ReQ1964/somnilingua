@@ -8,20 +8,18 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
-import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import req1964.somnilingua.shared.dto.SortFieldMapping;
 
 public class SortUtils {
 
-  public static Sort parseSort(List<String> sort,
+  public static Sort parseSort(String sort,
       Class<? extends Enum<? extends SortFieldMapping>> sortFieldMappings) {
-    if (CollectionUtils.isEmpty(sort)) {
+    if (!StringUtils.hasText(sort)) {
       return Sort.unsorted();
     }
 
-    Sort rawSort = Sort.by(sort.stream()
-        .map(SortUtils::parseSortString)
-        .toList());
+    Sort rawSort = Sort.by(parseSortString(sort));
 
     return applySortFieldMappings(rawSort, sortFieldMappings);
   }

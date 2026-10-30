@@ -10,9 +10,9 @@ import req1964.somnilingua.shared.enums.FilterKind;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DynamicFilterValue<T> {
+public class DynamicFilterValue {
 
-  private T value;
+  private String value;
 
   private FilterKind kind;
 }

@@ -2,7 +2,6 @@ package req1964.somnilingua.enrollment.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import req1964.somnilingua.shared.dto.PageableRequest;
@@ -12,8 +11,8 @@ import req1964.somnilingua.shared.dto.SortFieldMapping;
 @NoArgsConstructor
 public class LanguageEnrollmentsSearchRequest implements PageableRequest {
 
-  private List<LanguageEnrollmentsSearchCriteria> criteria;
-  
+  private LanguageEnrollmentsSearchCriteria criteria;
+
   @NotNull
   @Min(0)
   private Integer page;
@@ -22,10 +21,10 @@ public class LanguageEnrollmentsSearchRequest implements PageableRequest {
   @Min(1)
   private Integer size;
 
-  private List<String> sort;
+  private String sort;
 
   @Override
   public Class<? extends Enum<? extends SortFieldMapping>> getSortFieldMappings() {
-    return null;
+    return LanguageEnrollmentSortFieldMapping.class;
   }
 }
