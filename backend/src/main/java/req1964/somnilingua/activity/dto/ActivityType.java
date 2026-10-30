@@ -14,6 +14,6 @@ public enum ActivityType implements NamedEnum {
   WRITING("Writing"),
   STUDYING("Studying"),
   OTHER("Other");
-
+  
   private final String name;
 }

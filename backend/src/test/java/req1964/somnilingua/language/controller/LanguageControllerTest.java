@@ -1,5 +1,6 @@
 package req1964.somnilingua.language.controller;
 
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -17,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(LanguageController.class)
 class LanguageControllerTest {
+
   @Autowired
   MockMvc mockMvc;
 
@@ -26,9 +28,10 @@ class LanguageControllerTest {
   @Test
   void getLanguages_returnsLanguages() throws Exception {
     //given
-    List<LanguageResponse> languages = List.of(LanguageResponse.builder().id(1L).name("Polish").code("PL").build());
+    List<LanguageResponse> languages = List.of(
+        LanguageResponse.builder().id(1L).name("Polish").code("PL").build());
     //when
-    when(languageService.getLanguages()).thenReturn(languages);
+    when(languageService.getLanguages(Collections.emptyList())).thenReturn(languages);
 
     //then
     mockMvc.perform(get("/api/languages").contentType(MediaType.APPLICATION_JSON))

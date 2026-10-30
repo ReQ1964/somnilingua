@@ -16,6 +16,7 @@ import req1964.somnilingua.enrollment.dto.LanguageEnrollmentActivityStats;
 import req1964.somnilingua.enrollment.dto.ActivityStatsResponse;
 import req1964.somnilingua.enrollment.dto.CreateEnrollmentRequest;
 import req1964.somnilingua.enrollment.dto.LanguageEnrollmentResponse;
+import req1964.somnilingua.enrollment.dto.LanguageEnrollmentsSearchRequest;
 import req1964.somnilingua.enrollment.mapper.ActivityStatsMapper;
 import req1964.somnilingua.enrollment.mapper.LanguageEnrollmentMapper;
 import req1964.somnilingua.enrollment.repository.EnrollmentRepository;
@@ -79,11 +80,13 @@ public class EnrollmentService {
   }
 
   public PageResponse<LanguageEnrollmentResponse> getPaginatedLanguageEnrollments(
-      Pageable pageable) {
+      Pageable request) {
     User user = userRepository.findById(DEV_USER_ID)
         .orElseThrow(() -> new ResourceNotFoundException("User", DEV_USER_ID));
+
+    // todo dodaj specke
     Page<LanguageEnrollment> languageEnrollments = enrollmentRepository.findPaginatedByUser(user,
-        pageable);
+        request);
     List<Long> ids = languageEnrollments.stream().map(LanguageEnrollment::getId).toList();
 
     List<LanguageEnrollmentActivityStats> stats = ids.isEmpty() ? List.of()

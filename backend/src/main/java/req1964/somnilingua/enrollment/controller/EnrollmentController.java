@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import req1964.somnilingua.enrollment.dto.CreateEnrollmentRequest;
 import req1964.somnilingua.enrollment.dto.LanguageEnrollmentResponse;
+import req1964.somnilingua.enrollment.dto.LanguageEnrollmentsSearchRequest;
 import req1964.somnilingua.enrollment.service.EnrollmentService;
 import req1964.somnilingua.language.dto.LanguageResponse;
 import req1964.somnilingua.shared.dto.PageResponse;
@@ -49,8 +50,8 @@ public class EnrollmentController {
   )
   @GetMapping()
   public PageResponse<LanguageEnrollmentResponse> getPaginatedLanguageEnrollments(
-      Pageable pageable) {
-    return enrollmentService.getPaginatedLanguageEnrollments(pageable);
+      Pageable request) {
+    return enrollmentService.getPaginatedLanguageEnrollments(request);
   }
 
   @Operation(
