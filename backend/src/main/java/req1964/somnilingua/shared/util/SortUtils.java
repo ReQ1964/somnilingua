@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
@@ -21,15 +20,18 @@ public class SortUtils {
     }
 
     Sort rawSort = Sort.by(sort.stream()
-        .map((item) -> {
-          String[] parts = item.split(",");
-          return new Order(parts.length > 1 ? Direction.fromString(parts[1].trim()) : Direction.ASC,
-              parts[0].trim());
-        })
+        .map(SortUtils::parseSortString)
         .toList());
 
     return applySortFieldMappings(rawSort, sortFieldMappings);
   }
+
+  private static Order parseSortString(String item) {
+    String[] parts = item.split(",");
+    return new Order(parts.length > 1 ? Direction.fromString(parts[1].trim()) : Direction.ASC,
+        parts[0].trim());
+  }
+
 
   private static Sort applySortFieldMappings(Sort sort,
       Class<? extends Enum<? extends SortFieldMapping>> sortFieldMappings) {
@@ -37,13 +39,14 @@ public class SortUtils {
       return sort;
     }
 
-    Map<String, String> entityPathByRequestProperty = Arrays.stream(sortFieldMappings.getEnumConstants())
+    Map<String, String> entityPathByRequestProperty = Arrays.stream(
+            sortFieldMappings.getEnumConstants())
         .collect(Collectors.toMap(p -> ((SortFieldMapping) p).getRequestProperty(),
             p -> ((SortFieldMapping) p).getEntityPath()));
 
-    List<Sort.Order> orders = sort.get()
+    List<Sort.Order> orders = sort.stream()
         .map(mapRequestPropertyToEntityPath(entityPathByRequestProperty))
-        .collect(Collectors.toList());
+        .toList();
 
     return Sort.by(orders);
   }
